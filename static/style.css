@@ -1,0 +1,271 @@
+/* Global reset-ish */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", Arial, sans-serif;
+    background-color: #ffffff;
+    color: #111111;
+}
+
+/* Navbar */
+.navbar {
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand {
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+}
+
+.nav-links a {
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: #111111;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.2rem;
+    width: 0;
+    height: 1px;
+    background-color: #111111;
+    transition: width 0.2s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Layout */
+.page {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 3.5rem;
+}
+
+/* Flash messages */
+.flash-container {
+    margin-bottom: 1rem;
+}
+
+.flash {
+    border: 1px solid #111111;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    background-color: #f9f9f9;
+}
+
+/* Centered sections */
+.center-wrapper {
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Auth card */
+.auth-card {
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid #e5e5e5;
+    border-radius: 18px;
+    padding: 2rem 2.25rem 2.25rem;
+    background-color: #ffffff;
+}
+
+.auth-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+}
+
+.auth-subtitle {
+    margin: 0 0 1.75rem;
+    font-size: 0.9rem;
+    color: #666666;
+}
+
+/* Forms */
+.auth-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.83rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #444444;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border-radius: 10px;
+    border: 1px solid #d0d0d0;
+    font-size: 0.95rem;
+    outline: none;
+    background-color: #fafafa;
+}
+
+input:focus {
+    border-color: #111111;
+    background-color: #ffffff;
+}
+
+/* Buttons */
+.btn-primary {
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    background-color: #111111;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Page sections */
+.page-section {
+    margin-top: 1rem;
+}
+
+.page-title {
+    font-size: 1.7rem;
+    margin-bottom: 0.35rem;
+}
+
+.page-subtitle {
+    font-size: 0.95rem;
+    color: #555555;
+    margin-bottom: 1.75rem;
+}
+
+/* Cards & grid */
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card {
+    border-radius: 18px;
+    border: 1px solid #e5e5e5;
+    padding: 1.4rem 1.5rem;
+    background-color: #ffffff;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.card h2 {
+    font-size: 1.05rem;
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: #555555;
+    margin: 0;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    border-color: #cfcfcf;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.04);
+}
+
+/* Footer */
+.footer {
+    border-top: 1px solid #e5e5e5;
+    background-color: #ffffff;
+}
+
+.footer-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: #777777;
+}
+
+.footer-brand {
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+
+    .nav-inner,
+    .page,
+    .footer-inner {
+        padding: 0.75rem 1rem;
+    }
+
+    .auth-card {
+        padding: 1.75rem 1.6rem 1.9rem;
+    }
+}
+
+.hero-box {
+    text-align: center;
+    max-width: 600px;
+}
+
+.hero-title {
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.hero-subtitle {
+    font-size: 1.05rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.hero-buttons .btn-primary {
+    display: inline-block;
+    padding: 0.95rem 2rem;
+    text-decoration: none;
+}
