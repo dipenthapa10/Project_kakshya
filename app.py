@@ -39,6 +39,7 @@ def add_course():
 @app.route("/admin/courses/edit/<int:course_id>", methods=["GET", "POST"])
 def edit_course(course_id):
     course = get_course_by_id(course_id)
+    departments = get_departments()  # must be loaded BEFORE render
 
     if request.method == "POST":
         dept_ID = request.form["dept_ID"]
@@ -49,7 +50,14 @@ def edit_course(course_id):
         update_course(course_id, dept_ID, course_no, title, credits)
         return redirect("/admin/courses")
 
-    return render_template("admin/courses/edit.html", course=course)
+    return render_template(
+        "admin/courses/edit.html",
+        course=course,
+        departments=departments
+    )
+
+
+ 
 
 
 @app.route("/admin/courses/delete/<int:course_id>")
@@ -82,9 +90,6 @@ def instructor_dashboard():
 @app.route("/student")
 def student_dashboard():
     return render_template("student/dashboard.html")
-
-
-
 
 
 

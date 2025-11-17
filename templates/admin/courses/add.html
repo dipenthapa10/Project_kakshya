@@ -3,32 +3,33 @@
 
 {% block content %}
 
-<h2 class="k-title fade">Add New Course</h2>
+<div class="form-wrapper">
+    <h2 class="k-title fade">Add New Course</h2>
 
-<form method="POST" class="fade">
+    <form method="POST" class="fade">
 
-    <div class="form-group">
-        <label>Department</label>
-        <select name="dept_ID" required>
-            <option value="" disabled selected>Select Department</option>
+        <div class="form-group">
+            <label>Department</label>
+            <select name="dept_ID" required>
+                <option value="" disabled selected>Select Department</option>
 
-            {% for d in departments %}
-            <option value="{{ d.dept_ID }}">{{ d.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
+                {% for d in departments %}
+                <option value="{{ d.dept_ID }}">{{ d.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
 
-    <label>Course No</label>
-    <input type="text" name="course_no" required>
+        <label>Course No</label>
+        <input type="text" name="course_no">
 
-    <label>Title</label>
-    <input type="text" name="title" required>
+        <label>Title</label>
+        <input type="text" name="title">
 
-    <label>Credits</label>
-    <input type="number" name="credits" required>
+        <label>Credits</label>
+        <input type="number" name="credits">
 
-    <button type="submit" class="btn-modern">Add Course</button>
-</form>
-
+        <button class="btn-submit">Add Course</button>
+    </form>
+</div>
 {% endblock %}

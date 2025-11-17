@@ -394,3 +394,57 @@ input:focus {
         transform: translateY(0);
     }
 }
+
+/* Form container centering */
+.form-wrapper {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Label styling */
+.form-wrapper label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+    color: #333;
+}
+
+/* Input + Select styling */
+.form-wrapper input,
+.form-wrapper select {
+    width: 100%;
+    /* equal width for ALL */
+    padding: 12px 14px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s ease;
+    margin-bottom: 20px;
+    background: #fafafa;
+}
+
+/* Focus effect */
+.form-wrapper input:focus,
+.form-wrapper select:focus {
+    border-color: #000;
+}
+
+/* Add Course button */
+.btn-submit {
+    padding: 12px 22px;
+    background: #111;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-submit:hover {
+    background: #333;
+}
