@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Edit Course{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Edit Course</h2>
+
+<form method="POST" class="fade">
+
+    <label>Department ID</label>
+    <input type="number" name="dept_ID" value="{{ course.dept_ID }}" required>
+
+    <label>Course No</label>
+    <input type="text" name="course_no" value="{{ course.course_no }}" required>
+
+    <label>Title</label>
+    <input type="text" name="title" value="{{ course.title }}" required>
+
+    <label>Credits</label>
+    <input type="number" name="credits" value="{{ course.credits }}" required>
+
+    <button type="submit" class="btn-modern">Save Changes</button>
+</form>
+
+{% endblock %}
