@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Edit Section{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Edit Section</h2>
+
+<form method="POST" class="form-card fade">
+
+    <!-- Course dropdown -->
+    <label>Course</label>
+    <select name="course_ID" required>
+        {% for c in courses %}
+        <option value="{{ c.course_ID }}" {% if c.course_ID==section.course_ID %}selected{% endif %}>
+            {{ c.course_no }} — {{ c.title }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <!-- Section No -->
+    <label>Section No</label>
+    <input type="text" name="section_no" value="{{ section.section_no }}" required>
+
+    <!-- Semester -->
+    <label>Semester</label>
+    <input type="text" name="semester" value="{{ section.semester }}" required>
+
+    <!-- Instructor -->
+    <label>Instructor</label>
+    <select name="instructor_ID" required>
+        {% for i in instructors %}
+        <option value="{{ i.instructor_ID }}" {% if i.instructor_ID==section.instructor_ID %}selected{% endif %}>
+            {{ i.first_name }} {{ i.last_name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <!-- Classroom -->
+    <label>Building</label>
+    <input type="text" name="building" value="{{ section.building }}" required>
+
+    <label>Room Number</label>
+    <input type="text" name="room_number" value="{{ section.room_number }}" required>
+
+    <!-- Timeslot -->
+    <label>Timeslot</label>
+    <select name="timeslot_ID" required>
+        {% for t in timeslots %}
+        <option value="{{ t.timeslot_ID }}" {% if t.timeslot_ID==section.timeslot_ID %}selected{% endif %}>
+            {{ t.weekday }} ({{ t.start_time }} - {{ t.end_time }})
+        </option>
+        {% endfor %}
+    </select>
+
+    <button class="btn-primary">Save Changes</button>
+</form>
+
+{% endblock %}

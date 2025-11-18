@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Edit Classroom{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Edit Classroom</h2>
+
+<form method="POST" class="form-card fade">
+
+    <label>Building</label>
+    <input type="text" name="building" value="{{ classroom.building }}" required>
+
+    <label>Room Number</label>
+    <input type="text" name="room_number" value="{{ classroom.room_number }}" required>
+
+    <label>Capacity</label>
+    <input type="number" name="capacity" value="{{ classroom.capacity }}" required>
+
+    <button class="btn-primary">Save Changes</button>
+</form>
+
+{% endblock %}

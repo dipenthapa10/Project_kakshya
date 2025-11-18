@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Edit Timeslot{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Edit Timeslot</h2>
+
+<form method="POST" class="form-card fade">
+
+    <label>Weekday</label>
+    <select name="weekday" required>
+        <option {% if timeslot.weekday=="Monday" %}selected{% endif %}>Monday</option>
+        <option {% if timeslot.weekday=="Tuesday" %}selected{% endif %}>Tuesday</option>
+        <option {% if timeslot.weekday=="Wednesday" %}selected{% endif %}>Wednesday</option>
+        <option {% if timeslot.weekday=="Thursday" %}selected{% endif %}>Thursday</option>
+        <option {% if timeslot.weekday=="Friday" %}selected{% endif %}>Friday</option>
+    </select>
+
+    <label>Start Time</label>
+    <input type="time" name="start_time" value="{{ timeslot.start_time }}" required>
+
+    <label>End Time</label>
+    <input type="time" name="end_time" value="{{ timeslot.end_time }}" required>
+
+    <button class="btn-primary">Save Changes</button>
+</form>
+
+{% endblock %}

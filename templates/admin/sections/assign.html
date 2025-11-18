@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Assign Instructor{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Assign Instructor to Section</h2>
+
+<div class="form-card fade">
+
+    <p><strong>Course:</strong> {{ section.course_ID }}</p>
+    <p><strong>Section No:</strong> {{ section.section_no }}</p>
+    <p><strong>Semester:</strong> {{ section.semester }}</p>
+
+    <form method="POST">
+
+        <label>Select Instructor</label>
+        <select name="instructor_ID" required>
+            {% for i in instructors %}
+            <option value="{{ i.instructor_ID }}" {% if i.instructor_ID==section.instructor_ID %}selected{% endif %}>
+                {{ i.first_name }} {{ i.last_name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button class="btn-primary">Assign Instructor</button>
+
+    </form>
+</div>
+
+{% endblock %}

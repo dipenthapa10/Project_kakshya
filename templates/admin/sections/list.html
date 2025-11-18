@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Sections{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Manage Sections</h2>
+
+<a href="/admin/sections/add" class="btn-primary" style="margin-bottom: 15px; display: inline-block;">
+    + Add Section
+</a>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Course</th>
+            <th>Section</th>
+            <th>Semester</th>
+            <th>Instructor</th>
+            <th>Room</th>
+            <th>Timeslot</th>
+            <th>Assign</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for s in sections %}
+        <tr>
+            <td>{{ s.section_ID }}</td>
+
+            <td>{{ s.course_no }} — {{ s.title }}</td>
+
+            <td>{{ s.section_no }}</td>
+
+            <td>{{ s.semester }}</td>
+
+            <td>
+                {% if s.first_name %}
+                {{ s.first_name }} {{ s.last_name }}
+                {% else %}
+                <span style="color:#999;">Not Assigned</span>
+                {% endif %}
+            </td>
+
+            <td>{{ s.building }} {{ s.room_number }}</td>
+
+            <td>{{ s.weekday }} ({{ s.start_time }} - {{ s.end_time }})</td>
+
+            <!-- ASSIGN -->
+            <td class="col-center">
+                <a href="/admin/sections/assign/{{ s.section_ID }}" class="btn-edit" title="Assign Instructor">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                </a>
+            </td>
+
+            <!-- EDIT -->
+            <td class="col-center">
+                <a href="/admin/sections/edit/{{ s.section_ID }}" class="btn-edit" title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+            </td>
+
+            <!-- DELETE -->
+            <td class="col-center">
+                <a href="/admin/sections/delete/{{ s.section_ID }}" onclick="return confirm('Delete this section?');"
+                    class="btn-delete" title="Delete">
+                    <i class="fa-solid fa-trash fa-bounce"></i>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

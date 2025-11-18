@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Add Section{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Add Section</h2>
+
+<form method="POST" class="form-card fade">
+
+    <!-- Course dropdown -->
+    <label>Course</label>
+    <select name="course_ID" required>
+        <option value="" disabled selected>Select Course</option>
+        {% for c in courses %}
+        <option value="{{ c.course_ID }}">{{ c.course_no }} — {{ c.title }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Section No -->
+    <label>Section No</label>
+    <input type="text" name="section_no" required>
+
+    <!-- Semester -->
+    <label>Semester</label>
+    <input type="text" name="semester" placeholder="Fall 2025" required>
+
+    <!-- Instructor dropdown -->
+    <label>Instructor</label>
+    <select name="instructor_ID" required>
+        <option value="" disabled selected>Select Instructor</option>
+        {% for i in instructors %}
+        <option value="{{ i.instructor_ID }}">{{ i.first_name }} {{ i.last_name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Classroom -->
+    <label>Classroom</label>
+    <select name="building" required>
+        {% for room in classrooms %}
+        <option value="{{ room.building }}">{{ room.building }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Room Number</label>
+    <select name="room_number" required>
+        {% for room in classrooms %}
+        <option value="{{ room.room_number }}">{{ room.room_number }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Timeslot -->
+    <label>Timeslot</label>
+    <select name="timeslot_ID" required>
+        <option value="" disabled selected>Select Timeslot</option>
+        {% for t in timeslots %}
+        <option value="{{ t.timeslot_ID }}">
+            {{ t.weekday }} ({{ t.start_time }} - {{ t.end_time }})
+        </option>
+        {% endfor %}
+    </select>
+
+    <button class="btn-primary">Add Section</button>
+</form>
+
+{% endblock %}

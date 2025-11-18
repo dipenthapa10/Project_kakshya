@@ -448,3 +448,42 @@ input:focus {
 .btn-submit:hover {
     background: #333;
 }
+
+.k-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.3rem;
+}
+
+.k-table th,
+.k-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.btn-edit,
+.btn-delete {
+    text-decoration: none;
+    font-size: 18px;
+    padding: 6px 10px;
+    border-radius: 10px;
+}
+
+.btn-edit:hover {
+    background: #eef6ff;
+}
+
+.btn-delete:hover {
+    background: #ffeaea;
+}
+
+.form-card {
+    max-width: 420px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}

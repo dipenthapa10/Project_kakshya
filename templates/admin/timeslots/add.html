@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Add Timeslot{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Add Timeslot</h2>
+
+<form method="POST" class="form-card fade">
+
+    <label>Weekday</label>
+    <select name="weekday" required>
+        <option disabled selected>Select Day</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+    </select>
+
+    <label>Start Time</label>
+    <input type="time" name="start_time" required>
+
+    <label>End Time</label>
+    <input type="time" name="end_time" required>
+
+    <button class="btn-primary">Add Timeslot</button>
+</form>
+
+{% endblock %}

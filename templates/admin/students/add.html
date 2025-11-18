@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Add Student</h2>
+
+<form method="POST" class="form-card fade">
+
+    <label>First Name</label>
+    <input type="text" name="first_name" required>
+
+    <label>Middle Name (optional)</label>
+    <input type="text" name="middle_name">
+
+    <label>Last Name</label>
+    <input type="text" name="last_name" required>
+
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Department</label>
+    <select name="dept_ID" required>
+        <option disabled selected>Select Department</option>
+        {% for d in departments %}
+        <option value="{{ d.dept_ID }}">{{ d.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button class="btn-primary">Add Student</button>
+</form>
+
+{% endblock %}

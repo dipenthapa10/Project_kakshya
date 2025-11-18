@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Classrooms{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Manage Classrooms</h2>
+
+<a href="/admin/classrooms/add" class="btn-primary" style="margin-bottom: 15px; display:inline-block;">
+    + Add Classroom
+</a>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Building</th>
+            <th>Room Number</th>
+            <th>Capacity</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for c in classrooms %}
+        <tr>
+            <td>{{ c.building }}</td>
+            <td>{{ c.room_number }}</td>
+            <td>{{ c.capacity }}</td>
+
+            <td class="col-center">
+                <a href="/admin/classrooms/edit/{{ c.building }}/{{ c.room_number }}" class="btn-edit">
+                    ✏️
+                </a>
+            </td>
+
+            <td class="col-center">
+                <a href="/admin/classrooms/delete/{{ c.building }}/{{ c.room_number }}"
+                    onclick="return confirm('Delete this classroom?');" class="btn-delete">
+                    🗑️
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

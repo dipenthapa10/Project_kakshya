@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Instructors{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Manage Instructors</h2>
+
+<a href="/admin/instructors/add" class="btn-primary" style="margin-bottom: 15px; display:inline-block;">
+    + Add Instructor
+</a>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for i in instructors %}
+        <tr>
+            <td>{{ i.instructor_ID }}</td>
+            <td>{{ i.first_name }} {% if i.middle_name %}{{ i.middle_name }}{% endif %} {{ i.last_name }}</td>
+            <td>{{ i.email }}</td>
+            <td>{{ i.dept_name }}</td>
+
+            <td class="col-center">
+                <a href="/admin/instructors/edit/{{ i.instructor_ID }}" class="btn-edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+            </td>
+
+            <td class="col-center">
+                <a href="/admin/instructors/delete/{{ i.instructor_ID }}"
+                    onclick="return confirm('Delete this instructor?');" class="btn-delete"><i
+                        class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

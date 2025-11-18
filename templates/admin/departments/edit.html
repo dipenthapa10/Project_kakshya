@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Department{% endblock %}
+
+{% block content %}
+
+<div class="form-container fade">
+    <h2 class="k-title">Edit Department</h2>
+
+    <form method="POST" class="form-card">
+
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" name="name" value="{{ department.name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Building</label>
+            <input type="text" name="building" value="{{ department.building }}" required>
+        </div>
+
+        <button class="btn-primary">Save Changes</button>
+    </form>
+</div>
+
+{% endblock %}

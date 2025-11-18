@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Timeslots{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Manage Timeslots</h2>
+
+<a href="/admin/timeslots/add" class="btn-primary" style="margin-bottom: 15px; display:inline-block;">
+    + Add Timeslot
+</a>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Weekday</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for t in timeslots %}
+        <tr>
+            <td>{{ t.timeslot_ID }}</td>
+            <td>{{ t.weekday }}</td>
+            <td>{{ t.start_time }}</td>
+            <td>{{ t.end_time }}</td>
+
+            <td class="col-center">
+                <a href="/admin/timeslots/edit/{{ t.timeslot_ID }}" class="btn-edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+            </td>
+
+            <td class="col-center">
+                <a href="/admin/timeslots/delete/{{ t.timeslot_ID }}" onclick="return confirm('Delete this timeslot?');"
+                    class="btn-delete"><i class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

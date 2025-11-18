@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Edit Instructor{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Edit Instructor</h2>
+
+<form method="POST" class="form-card fade">
+
+    <label>First Name</label>
+    <input type="text" name="first_name" value="{{ instructor.first_name }}" required>
+
+    <label>Middle Name (optional)</label>
+    <input type="text" name="middle_name" value="{{ instructor.middle_name }}">
+
+    <label>Last Name</label>
+    <input type="text" name="last_name" value="{{ instructor.last_name }}" required>
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ instructor.email }}" required>
+
+    <label>Department</label>
+    <select name="dept_ID" required>
+        {% for d in departments %}
+        <option value="{{ d.dept_ID }}" {% if d.dept_ID==instructor.dept_ID %}selected{% endif %}>
+            {{ d.name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <button class="btn-primary">Save Changes</button>
+</form>
+
+{% endblock %}
