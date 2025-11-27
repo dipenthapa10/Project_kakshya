@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard {% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Administrator Panel</h2>
+
+
+<div class="k-grid fade">
+
+    <a href="/admin/courses" class="k-card">
+        <h3>Courses</h3>
+        <p>Manage course details</p>
+    </a>
+
+    <a href="/admin/departments" class="k-card">
+        <h3>Departments</h3>
+        <p>Edit academic departments</p>
+    </a>
+
+    <a href="/admin/sections" class="k-card">
+        <h3>Sections</h3>
+        <p>Manage class sections</p>
+    </a>
+
+    <a href="/admin/classrooms" class="k-card">
+        <h3>Classrooms</h3>
+        <p>Manage building & rooms</p>
+    </a>
+
+    <a href="/admin/timeslots" class="k-card">
+        <h3>Time Slots</h3>
+        <p>Set lecture meeting times</p>
+    </a>
+
+    <a href="/admin/instructors" class="k-card">
+        <h3>Instructors</h3>
+        <p>Manage faculty data</p>
+    </a>
+
+    <a href="/admin/students" class="k-card">
+        <h3>Students</h3>
+        <p>Maintain student records</p>
+    </a>
+
+    <a href="/admin/assign-teacher" class="k-card">
+        <h3>Assign Teachers</h3>
+        <p>Assign faculty to sections</p>
+    </a>
+
+</div>
+
+{% endblock %}

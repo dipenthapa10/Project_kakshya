@@ -1,4 +1,7 @@
 from config import get_connection
+############# ADMIN ###########
+################################
+
 
 ####################### COURSE ############################ 
 
@@ -137,25 +140,30 @@ def delete_department(dept_id):
 
 ################ CRUD SECTION ################
 
-# Read 
+
+
 def get_all_sections():
     conn = get_connection()
     cur = conn.cursor()
+    
     cur.execute("""
-        SELECT s.section_ID, s.section_no, s.semester,
-               c.course_no, c.title,
-               i.first_name, i.last_name,
-               s.building, s.room_number,
-               t.weekday, t.start_time, t.end_time
+        SELECT 
+            s.section_ID, s.course_ID, s.section_no, s.semester,
+            s.instructor_ID, s.building, s.room_number, s.timeslot_ID,
+            c.course_no, c.title,
+            i.first_name, i.last_name,
+            t.weekday, t.start_time, t.end_time
         FROM Section s
         JOIN Course c ON s.course_ID = c.course_ID
-        JOIN Instructor i ON s.instructor_ID = i.instructor_ID
+        LEFT JOIN Instructor i ON s.instructor_ID = i.instructor_ID   -- FIX
         JOIN Timeslot t ON s.timeslot_ID = t.timeslot_ID
-        ORDER BY c.course_no, s.section_no
+        ORDER BY s.section_ID
     """)
-    rows = cur.fetchall()
+    
+    results = cur.fetchall()
     conn.close()
-    return rows
+    return results
+
 
 #read one section 
 def get_section_by_id(section_id):
@@ -202,7 +210,7 @@ def delete_section(section_id):
 
 # =====================================
 #        CLASSROOM CRUD
-# =====================================
+
 
 def get_all_classrooms():
     conn = get_connection()
@@ -440,4 +448,16 @@ def assign_instructor_to_section(section_id, instructor_ID):
     """, (instructor_ID, section_id))
     conn.commit()
     conn.close()
+
+def remove_teacher(section_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Section
+        SET instructor_ID = NULL
+        WHERE section_ID = %s
+    """, (section_id,))
+    conn.commit()
+    conn.close()
+
 

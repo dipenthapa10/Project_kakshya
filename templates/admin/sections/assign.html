@@ -25,6 +25,15 @@
         <button class="btn-primary">Assign Instructor</button>
 
     </form>
+
+    <!-- REMOVE TEACHER BUTTON -->
+    {% if section.instructor_ID %}
+    <a href="/admin/sections/remove-teacher/{{ section.section_ID }}" class="btn-delete"
+        onclick="return confirm('Remove instructor from this class?');" style="margin-top: 15px; display:inline-block;">
+        Remove Instructor
+    </a>
+    {% endif %}
+
 </div>
 
 {% endblock %}
