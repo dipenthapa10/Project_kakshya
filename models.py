@@ -459,5 +459,3 @@ def remove_teacher(section_id):
     """, (section_id,))
     conn.commit()
     conn.close()
-
-
