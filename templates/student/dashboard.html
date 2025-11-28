@@ -1,64 +1,47 @@
 {% extends "base.html" %}
-
 {% block title %}Student Dashboard{% endblock %}
 
 {% block content %}
-<div class="k-container fade">
 
-    <h2 class="k-title">Student Dashboard</h2>
-    <p class="k-subtitle">Welcome, {{ student.first_name }} {{ student.last_name }} 👋</p>
+<h2 class="k-title fade">Student Dashboard</h2>
 
-    <!-- Quick Stats -->
-    <div class="k-grid">
-        <a href="{{ url_for('student.student_courses') }}" class="k-card fade">
-            <h3>{{ courses|length }}</h3>
-            <p>Enrolled Courses</p>
-        </a>
+<div class="grid-3 fade">
 
-        <a href="{{ url_for('student.student_grades') }}" class="k-card fade">
-            <h3><i class="fa-solid fa-graduation-cap"></i></h3>
-            <p>View Grades</p>
-        </a>
+    <a class="k-card" href="/student/register">
+        <h3>Register for Classes</h3>
+        <p>Add courses you want to take.</p>
+    </a>
 
-        <a href="{{ url_for('student.student_profile') }}" class="k-card fade">
-            <h3><i class="fa-solid fa-user"></i></h3>
-            <p>Your Profile</p>
-        </a>
-    </div>
+    <a class="k-card" href="/student/drop">
+        <h3>Drop Classes</h3>
+        <p>Remove a class you are enrolled in.</p>
+    </a>
 
-    <!-- Enrolled Courses Preview -->
-    <div class="k-section fade">
-        <h3 class="k-section-title">Your Courses</h3>
+    <a class="k-card" href="/student/grades">
+        <h3>Final Grades</h3>
+        <p>View your course grades.</p>
+    </a>
 
-        {% if courses %}
-        <table class="k-table">
-            <thead>
-                <tr>
-                    <th>Course</th>
-                    <th>Title</th>
-                    <th>Credits</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for c in courses %}
-                <tr>
-                    <td>{{ c.course_no }}</td>
-                    <td>{{ c.title }}</td>
-                    <td>{{ c.credits }}</td>
-                    <td>
-                        <a href="{{ url_for('student.student_course_detail', course_id=c.course_id) }}" class="k-link">
-                            View
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p class="k-empty">You are not enrolled in any courses yet.</p>
-        {% endif %}
-    </div>
+    <a class="k-card" href="/student/courses">
+        <h3>Courses by Semester</h3>
+        <p>Check availability and status.</p>
+    </a>
+
+    <a class="k-card" href="/student/sections">
+        <h3>Section Information</h3>
+        <p>Room, instructor, schedule.</p>
+    </a>
+
+    <a class="k-card" href="/student/advisor">
+        <h3>Advisor Info</h3>
+        <p>Check who your advisor is.</p>
+    </a>
+
+    <a class="k-card" href="/student/profile">
+        <h3>Edit Profile</h3>
+        <p>Update your information.</p>
+    </a>
 
 </div>
+
 {% endblock %}
