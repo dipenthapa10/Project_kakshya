@@ -535,3 +535,31 @@ input:focus {
     border-color: #ccc;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
 }
+
+/* for profile */
+
+.flash-area {
+    max-width: 700px;
+    margin: 15px auto;
+}
+
+.flash {
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.flash-success {
+    background: #e8ffe8;
+    color: #0a7a0a;
+    border: 1px solid #9fdc9f;
+}
+
+.flash-error {
+    background: #ffe8e8;
+    color: #a00;
+    border: 1px solid #e0a0a0;
+}

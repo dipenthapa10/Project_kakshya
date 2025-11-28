@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}My Sections — {{ semester }}{% endblock %}
+
+{% block content %}
+<h2 class="k-title fade">Sections You Teach — {{ semester }}</h2>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Title</th>
+            <th>Section</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for s in sections %}
+        <tr>
+            <td>{{ s.course_no }}</td>
+            <td>{{ s.title }}</td>
+            <td>{{ s.section_no }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Advisor — Students{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Advisor — Manage Students</h2>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for s in students %}
+        <tr>
+            <td>{{ s.first_name }} {{ s.last_name }}</td>
+            <td>{{ s.email }}</td>
+
+            <td class="col-center">
+
+                {% if s.advisor_ID == instructor_id %}
+                <!-- Instructor IS the advisor -->
+                <span style="color: green; font-weight: bold;">
+                    ✓ You are advisor
+                </span>
+
+                <!-- REMOVE BUTTON -->
+                <a href="/instructor/advisor/remove/{{ s.student_ID }}" class="btn-delete" style="margin-left: 12px;"
+                    onclick="return confirm('Remove yourself as advisor for this student?');">
+                    <i class="fa-solid fa-delete-left fa-lg"></i>
+                </a>
+
+                {% elif s.advisor_ID is none %}
+                <!-- Student has no advisor -->
+                <a href="/instructor/advisor/add/{{ s.student_ID }}" class="btn-primary">
+                    + Add
+                </a>
+
+                {% else %}
+                <!-- Another instructor is advisor -->
+                <span style="color: #777;">
+                    Has another advisor
+                </span>
+                {% endif %}
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

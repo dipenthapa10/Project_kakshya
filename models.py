@@ -460,4 +460,286 @@ def remove_teacher(section_id):
     conn.commit()
     conn.close()
 
+########### Instructor################
 
+#### get section taught by insttructor 
+
+def get_instructor_sections(instructor_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT s.section_ID, s.section_no, s.semester, c.course_no, c.title
+        FROM Section s
+        JOIN Course c ON s.course_ID = c.course_ID
+        WHERE s.instructor_ID = %s
+    """, (instructor_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
+##### Get roster of a section
+def get_section_roster(section_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT e.enrollment_ID, st.student_ID, st.first_name, st.last_name, e.grade
+        FROM Enrollment e
+        JOIN Student st ON e.student_ID = st.student_ID
+        WHERE e.section_ID = %s
+    """, (section_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+## update grade 
+
+def update_grade(enrollment_id, grade):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Enrollment
+        SET grade = %s
+        WHERE enrollment_ID = %s
+    """, (grade, enrollment_id))
+    conn.commit()
+    conn.close()
+
+
+########## Add students as advisor #############
+
+def get_students_without_advisor():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT student_ID, first_name, last_name, email 
+        FROM Student
+        WHERE advisor_ID IS NULL
+        ORDER BY last_name
+    """)
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
+def assign_advisor(student_id, instructor_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Student
+        SET advisor_ID = %s
+        WHERE student_ID = %s
+    """, (instructor_id, student_id))
+    conn.commit()
+    conn.close()
+
+
+def get_all_students_with_advisors():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 
+            s.student_ID,
+            s.first_name,
+            s.last_name,
+            s.email,
+            s.advisor_ID
+        FROM Student s
+        ORDER BY s.last_name
+    """)
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+### Remove as advisor
+
+def remove_advisor(student_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Student
+        SET advisor_ID = NULL
+        WHERE student_ID = %s
+    """, (student_id,))
+    conn.commit()
+    conn.close()
+
+#### pre req 
+
+# def get_prereqs(course_id):
+#     conn = get_connection()
+#     cur = conn.cursor()
+#     cur.execute("""
+#         SELECT P.prereq_course_ID, C.course_no, C.title
+#         FROM Pre_Requisite P
+#         JOIN Course C ON P.prereq_course_ID = C.course_ID
+#         WHERE P.course_ID = %s
+#     """, (course_id,))
+#     rows = cur.fetchall()
+#     conn.close()
+#     return rows
+
+# ## insert pre req 
+
+# def add_prereq(course_id, prereq_id):
+#     conn = get_connection()
+#     cur = conn.cursor()
+#     cur.execute("""
+#         INSERT INTO Pre_Requisite (course_ID, prereq_course_ID, prereq_title)
+#         SELECT %s, course_ID, title
+#         FROM Course
+#         WHERE course_ID = %s
+#     """, (course_id, prereq_id))
+#     conn.commit()
+#     conn.close()
+
+#     ## delete 
+# def remove_prereq(course_id, prereq_id):
+#     conn = get_connection()
+#     cur = conn.cursor()
+#     cur.execute("""
+#         DELETE FROM Pre_Requisite
+#         WHERE course_ID = %s AND prereq_course_ID = %s
+#     """, (course_id, prereq_id))
+#     conn.commit()
+#     conn.close()
+
+
+# def get_instructor_courses(instructor_id):
+#     conn = get_connection()
+#     cur = conn.cursor()
+#     cur.execute("""
+#         SELECT C.course_ID, C.course_no, C.title
+#         FROM Section S
+#         JOIN Course C ON S.course_ID = C.course_ID
+#         WHERE S.instructor_ID = %s
+#         GROUP BY C.course_ID
+#     """, (instructor_id,))
+#     rows = cur.fetchall()
+#     conn.close()
+#     return rows
+
+# -------------------------------
+# PREREQUISITE FUNCTIONS
+# -------------------------------
+
+def get_prereqs(course_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT P.prereq_course_ID, C.course_no, C.title
+        FROM Pre_Requisite P
+        JOIN Course C ON P.prereq_course_ID = C.course_ID
+        WHERE P.course_ID = %s
+    """, (course_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
+def add_prereq(course_id, prereq_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO Pre_Requisite (course_ID, prereq_course_ID)
+        VALUES (%s, %s)
+    """, (course_id, prereq_id))
+    conn.commit()
+    conn.close()
+
+
+def remove_prereq(course_id, prereq_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        DELETE FROM Pre_Requisite
+        WHERE course_ID = %s AND prereq_course_ID = %s
+    """, (course_id, prereq_id))
+    conn.commit()
+    conn.close()
+
+
+def get_instructor_courses(instructor_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT C.course_ID, C.course_no, C.title
+        FROM Section S
+        JOIN Course C ON S.course_ID = C.course_ID
+        WHERE S.instructor_ID = %s
+        GROUP BY C.course_ID
+    """, (instructor_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+def get_all_courses():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Course ORDER BY course_no")
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+########## Profile #######
+
+def update_instructor_profile(instructor_id, first, middle, last, email):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Instructor
+        SET first_name = %s, middle_name = %s, last_name = %s, email = %s
+        WHERE instructor_ID = %s
+    """, (first, middle, last, email, instructor_id))
+    conn.commit()
+    conn.close()
+
+
+
+def get_instructor(instructor_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT instructor_ID, first_name, middle_name, last_name, email
+        FROM Instructor
+        WHERE instructor_ID = %s
+    """, (instructor_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
+
+#### get available 
+
+def get_instructor_semesters(instructor_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    
+    cur.execute("""
+        SELECT DISTINCT semester
+        FROM Section
+        WHERE instructor_ID = %s
+        ORDER BY semester
+    """, (instructor_id,))
+    
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+## get section by sem
+
+def get_sections_by_semester(instructor_id, semester):
+    conn = get_connection()
+    cur = conn.cursor()
+    
+    cur.execute("""
+        SELECT S.section_ID, S.section_no, S.semester,
+               C.course_no, C.title
+        FROM Section S
+        JOIN Course C ON S.course_ID = C.course_ID
+        WHERE S.instructor_ID = %s AND S.semester = %s
+    """, (instructor_id, semester))
+    
+    rows = cur.fetchall()
+    conn.close()
+    return rows

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Manage Prerequisites{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Manage Course Prerequisites</h2>
+
+<h3 class="fade">Course ID: {{ course_id }}</h3>
+
+<!-- Add Prerequisite -->
+<form action="/instructor/prereq/add/{{ course_id }}" method="POST" class="fade" style="margin-bottom:20px;">
+    <label>Select Prerequisite Course</label>
+    <select name="prereq_id" required>
+        {% for c in all_courses %}
+        <option value="{{ c.course_ID }}">{{ c.course_no }} — {{ c.title }}</option>
+        {% endfor %}
+    </select>
+
+    <button class="btn-primary" style="margin-left:10px;">+ Add</button>
+</form>
+
+<!-- List Existing Prereqs -->
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Prerequisite Course</th>
+            <th>Title</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for p in prereqs %}
+        <tr>
+            <td>{{ p.course_no }}</td>
+            <td>{{ p.title }}</td>
+
+            <td class="col-center">
+                <a href="/instructor/prereq/remove/{{ course_id }}/{{ p.prereq_course_ID }}" class="btn-delete"
+                    onclick="return confirm('Remove this prerequisite?');">
+                    <i class="fa-solid fa-trash fa-bounce"></i>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

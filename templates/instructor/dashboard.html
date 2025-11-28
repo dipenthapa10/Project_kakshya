@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Instructor Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="k-title fade">Instructor Dashboard</h2>
+
+<div class="k-grid fade">
+
+    <a class="k-card" href="/instructor/sections">
+        <h3>Your Sections</h3>
+        <p>Check class rosters & enrolled students.</p>
+    </a>
+
+    <a class="k-card" href="/instructor/grades">
+        <h3>Submit / Change Grades</h3>
+        <p>Grade your students.</p>
+    </a>
+
+    <a class="k-card" href="/instructor/advising">
+        <h3>Advisor Management</h3>
+        <p>Add / remove academic advisees.</p>
+    </a>
+
+    <a class="k-card" href="/instructor/prereq">
+        <h3>Modify Prerequisites</h3>
+        <p>Edit pre-reqs for your courses.</p>
+    </a>
+
+    <a class="k-card" href="/instructor/teaching">
+        <h3>Teaching Schedule</h3>
+        <p>View courses you teach by semester.</p>
+    </a>
+
+
+    <a class="k-card" href="/instructor/profile">
+        <h3>Edit Profile</h3>
+        <p>Modify your personal information.</p>
+    </a>
+
+</div>
+{% endblock %}

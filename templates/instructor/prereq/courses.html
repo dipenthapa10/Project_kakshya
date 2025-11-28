@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}My Courses — Prerequisites{% endblock %}
+
+{% block content %}
+<h2 class="k-title fade">Select a Course to Modify Prerequisites</h2>
+
+<div class="grid-3 fade">
+    {% for c in courses %}
+    <a class="card-link" href="/instructor/prereq/{{ c.course_ID }}">
+        <div class="card">
+            <h2>{{ c.course_no }}</h2>
+            <p>{{ c.title }}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+{% endblock %}
