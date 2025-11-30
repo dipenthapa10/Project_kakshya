@@ -14,8 +14,8 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Email</th>
-            <th>Department</th>
+            <!-- <th>Email</th>
+            <th>Department</th> -->
             <th>Edit</th>
             <th>Delete</th>
         </tr>
@@ -26,8 +26,9 @@
         <tr>
             <td>{{ i.instructor_ID }}</td>
             <td>{{ i.first_name }} {% if i.middle_name %}{{ i.middle_name }}{% endif %} {{ i.last_name }}</td>
-            <td>{{ i.email }}</td>
-            <td>{{ i.dept_name }}</td>
+            <!-- <td>{{ i.email }}</td>
+            <td>{{ i.dept_name }}</td> -->
+
 
             <td class="col-center">
                 <a href="/admin/instructors/edit/{{ i.instructor_ID }}" class="btn-edit">

@@ -5,35 +5,72 @@
 
 <h2 class="k-title fade">Assign Instructor to Section</h2>
 
-<div class="form-card fade">
+<div class="form-wrapper fade">
 
-    <p><strong>Course:</strong> {{ section.course_ID }}</p>
-    <p><strong>Section No:</strong> {{ section.section_no }}</p>
-    <p><strong>Semester:</strong> {{ section.semester }}</p>
+    <div class="form-card">
 
-    <form method="POST">
+        <!-- Course -->
+        <div class="form-group">
+            <label>Course</label>
+            <input type="text" value="{{ section.course_ID }}" disabled>
+        </div>
 
-        <label>Select Instructor</label>
-        <select name="instructor_ID" required>
-            {% for i in instructors %}
-            <option value="{{ i.instructor_ID }}" {% if i.instructor_ID==section.instructor_ID %}selected{% endif %}>
-                {{ i.first_name }} {{ i.last_name }}
-            </option>
-            {% endfor %}
-        </select>
+        <!-- Section No -->
+        <div class="form-group">
+            <label>Section No</label>
+            <input type="text" value="{{ section.section_no }}" disabled>
+        </div>
 
-        <button class="btn-primary">Assign Instructor</button>
+        <!-- Semester -->
+        <div class="form-group">
+            <label>Semester</label>
+            <input type="text" value="{{ section.semester }}" disabled>
+        </div>
 
-    </form>
 
-    <!-- REMOVE TEACHER BUTTON -->
-    {% if section.instructor_ID %}
-    <a href="/admin/sections/remove-teacher/{{ section.section_ID }}" class="btn-delete"
-        onclick="return confirm('Remove instructor from this class?');" style="margin-top: 15px; display:inline-block;">
-        Remove Instructor
-    </a>
-    {% endif %}
+        <!-- ========== CASE 1: Instructor already assigned ========== -->
+        {% if section.instructor_ID %}
 
+        <div class="form-group">
+            <label>Assigned Instructor</label>
+            <input type="text" value="{{ section.instructor_first }} {{ section.instructor_last }}" disabled>
+        </div>
+
+        <a href="/admin/sections/remove-teacher/{{ section.section_ID }}"
+            onclick="return confirm('Remove instructor from this section?');" class="btn-primary" style="
+                background:#cc0000;
+                margin-top:10px;
+                text-align:center;
+           ">
+            Remove Instructor
+        </a>
+
+
+        <!-- ========== CASE 2: No instructor assigned ========== -->
+        {% else %}
+
+        <form method="POST">
+
+            <div class="form-group">
+                <label>Select Instructor</label>
+                <select name="instructor_ID" required>
+                    {% for i in instructors %}
+                    <option value="{{ i.instructor_ID }}">
+                        {{ i.first_name }} {{ i.last_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button class="btn-primary" style="margin-top: 10px;">
+                Assign Instructor
+            </button>
+
+        </form>
+
+        {% endif %}
+
+    </div>
 </div>
 
 {% endblock %}

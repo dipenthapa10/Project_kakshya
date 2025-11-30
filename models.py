@@ -1,4 +1,5 @@
 from config import get_connection
+import pymysql
 ############# ADMIN ###########
 ################################
 
@@ -26,22 +27,34 @@ def get_course_by_id(course_id):
 
 
 ### CREATE ###
-def insert_course(name, course_no, title, credits):
+# def insert_course(name, course_no, title, credits):
+#     conn = get_connection()
+#     cur = conn.cursor()
+
+#     # Get dept_ID from Department table using the department name
+#     cur.execute("SELECT dept_ID FROM Department WHERE name = %s", (name,))
+#     result = cur.fetchone()
+
+#     if not result:
+#         print("Department does not exist.")
+#         conn.close()
+#         return
+
+#     dept_ID = result["dept_ID"]  # because you're using DictCursor
+
+#     # Now insert course
+#     cur.execute("""
+#         INSERT INTO Course (dept_ID, course_no, title, credits)
+#         VALUES (%s, %s, %s, %s)
+#     """, (dept_ID, course_no, title, credits))
+
+#     conn.commit()
+#     conn.close()
+
+def insert_course(dept_ID, course_no, title, credits):
     conn = get_connection()
     cur = conn.cursor()
 
-    # Get dept_ID from Department table using the department name
-    cur.execute("SELECT dept_ID FROM Department WHERE name = %s", (name,))
-    result = cur.fetchone()
-
-    if not result:
-        print("Department does not exist.")
-        conn.close()
-        return
-
-    dept_ID = result["dept_ID"]  # because you're using DictCursor
-
-    # Now insert course
     cur.execute("""
         INSERT INTO Course (dept_ID, course_no, title, credits)
         VALUES (%s, %s, %s, %s)
@@ -49,6 +62,7 @@ def insert_course(name, course_no, title, credits):
 
     conn.commit()
     conn.close()
+
 
 
 
@@ -140,8 +154,6 @@ def delete_department(dept_id):
 
 ################ CRUD SECTION ################
 
-
-
 def get_all_sections():
     conn = get_connection()
     cur = conn.cursor()
@@ -155,8 +167,8 @@ def get_all_sections():
             t.weekday, t.start_time, t.end_time
         FROM Section s
         JOIN Course c ON s.course_ID = c.course_ID
-        LEFT JOIN Instructor i ON s.instructor_ID = i.instructor_ID   -- FIX
-        JOIN Timeslot t ON s.timeslot_ID = t.timeslot_ID
+        LEFT JOIN Instructor i ON s.instructor_ID = i.instructor_ID
+        LEFT JOIN Timeslot t ON s.timeslot_ID = t.timeslot_ID
         ORDER BY s.section_ID
     """)
     
@@ -168,8 +180,28 @@ def get_all_sections():
 #read one section 
 def get_section_by_id(section_id):
     conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM Section WHERE section_ID = %s", (section_id,))
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    cur.execute("""
+        SELECT 
+            s.section_ID,
+            s.course_ID,
+            s.section_no,
+            s.semester,
+            s.instructor_ID,
+            s.building,
+            s.room_number,
+            s.timeslot_ID,
+
+            -- Instructor Name
+            i.first_name AS instructor_first,
+            i.last_name AS instructor_last
+
+        FROM Section s
+        LEFT JOIN Instructor i ON s.instructor_ID = i.instructor_ID
+        WHERE s.section_ID = %s
+    """, (section_id,))
+
     row = cur.fetchone()
     conn.close()
     return row
@@ -210,27 +242,33 @@ def delete_section(section_id):
 
 # =====================================
 #        CLASSROOM CRUD
-
+# =====================================
 
 def get_all_classrooms():
     conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM Classroom ORDER BY building, room_number")
-    rows = cur.fetchall()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    cur.execute("SELECT building, room_number, capacity FROM Classroom")
+    classrooms = cur.fetchall()
+
     conn.close()
-    return rows
+    return classrooms
 
 
 def get_classroom(building, room_number):
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
     cur.execute("""
-        SELECT * FROM Classroom
-        WHERE building = %s AND room_number = %s
+        SELECT building, room_number, capacity
+        FROM Classroom
+        WHERE building=%s AND room_number=%s
     """, (building, room_number))
-    row = cur.fetchone()
+
+    data = cur.fetchone()
+
     conn.close()
-    return row
+    return data
 
 
 def insert_classroom(building, room_number, capacity):
@@ -323,17 +361,23 @@ def delete_timeslot(timeslot_id):
 # =====================================
 #            INSTRUCTOR CRUD
 
-
 def get_all_instructors():
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
     cur.execute("""
-        SELECT i.instructor_ID, i.first_name, i.middle_name, i.last_name, 
-               i.email, d.name AS dept_name
+        SELECT 
+            i.instructor_ID,
+            i.first_name,
+            COALESCE(i.middle_name, '') AS middle_name,
+            i.last_name,
+            i.email,
+            COALESCE(d.name, 'No Department') AS dept_name
         FROM Instructor i
-        JOIN Department d ON i.dept_ID = d.dept_ID
-        ORDER BY i.last_name
+        LEFT JOIN Department d ON i.dept_ID = d.dept_ID
+        ORDER BY i.instructor_ID
     """)
+
     rows = cur.fetchall()
     conn.close()
     return rows
@@ -341,8 +385,22 @@ def get_all_instructors():
 
 def get_instructor_by_id(instructor_ID):
     conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM Instructor WHERE instructor_ID = %s", (instructor_ID,))
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    cur.execute("""
+        SELECT 
+            i.instructor_ID,
+            i.first_name,
+            i.middle_name,
+            i.last_name,
+            i.email,
+            i.dept_ID,
+            COALESCE(d.name, 'No Department') AS dept_name
+        FROM Instructor i
+        LEFT JOIN Department d ON i.dept_ID = d.dept_ID
+        WHERE i.instructor_ID = %s
+    """, (instructor_ID,))
+
     row = cur.fetchone()
     conn.close()
     return row
@@ -784,20 +842,7 @@ def drop_student_from_section(student_id, section_id):
 
 
 
-def get_all_sections():
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("""
-        SELECT S.section_ID, S.section_no, S.semester,
-               C.course_no, C.title,
-               I.first_name, I.last_name
-        FROM Section S
-        JOIN Course C ON S.course_ID = C.course_ID
-        LEFT JOIN Instructor I ON S.instructor_ID = I.instructor_ID
-    """)
-    rows = cur.fetchall()
-    conn.close()
-    return rows
+
 
 
 #### drop 

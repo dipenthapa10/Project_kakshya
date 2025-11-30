@@ -18,6 +18,15 @@
 
     <label>Email</label>
     <input type="email" name="email" value="{{ instructor.email }}" required>
+    <!-- 
+    <label>Department</label>
+    <select name="dept_ID" required>
+        {% for d in departments %}
+        <option value="{{ d.dept_ID }}" {% if d.dept_ID==instructor.dept_ID %}selected{% endif %}>
+            {{ d.name }}
+        </option>
+        {% endfor %}
+    </select> -->
 
     <label>Department</label>
     <select name="dept_ID" required>
@@ -27,6 +36,7 @@
         </option>
         {% endfor %}
     </select>
+
 
     <button class="btn-primary">Save Changes</button>
 </form>

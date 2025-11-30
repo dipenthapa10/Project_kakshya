@@ -24,16 +24,15 @@ def admin_courses():
     data = get_courses()
     return render_template("admin/courses/courses.html", courses=data)
 
-
 @admin_bp.route("/courses/add", methods=["GET", "POST"])
 def add_course():
     if request.method == "POST":
-        name = request.form["name"]
+        dept_ID = request.form["dept_ID"]   
         course_no = request.form["course_no"]
         title = request.form["title"]
         credits = request.form["credits"]
 
-        insert_course(name, course_no, title, credits)
+        insert_course(dept_ID, course_no, title, credits)
         return redirect("/admin/courses")
 
     departments = get_departments()
@@ -195,7 +194,9 @@ def add_classroom():
 
 @admin_bp.route("/classrooms/edit/<building>/<room_number>", methods=["GET", "POST"])
 def edit_classroom(building, room_number):
+    # classroom = get_classroom(building, room_number)
     classroom = get_classroom(building, room_number)
+   
 
     if request.method == "POST":
         new_building = request.form["building"]
@@ -268,6 +269,8 @@ def admin_instructors():
     return render_template("admin/instructors/list.html", instructors=instructors)
 
 
+
+
 @admin_bp.route("/instructors/add", methods=["GET", "POST"])
 def add_instructor():
     if request.method == "POST":
@@ -304,7 +307,6 @@ def edit_instructor(instructor_ID):
 def delete_instructor_route(instructor_ID):
     delete_instructor(instructor_ID)
     return redirect("/admin/instructors")
-
 
 ##########################################
 #                 STUDENTS CRUD

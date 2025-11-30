@@ -5,18 +5,30 @@
 
 <h2 class="k-title fade">Edit Classroom</h2>
 
-<form method="POST" class="form-card fade">
+<div class="form-wrapper fade">
+    <form method="POST" class="form-card">
 
-    <label>Building</label>
-    <input type="text" name="building" value="{{ classroom.building }}" required>
+        <!-- BUILDING -->
+        <div class="form-group">
+            <label>Building</label>
+            <input type="text" name="building" value="{{ classroom.building }}" required>
+        </div>
 
-    <label>Room Number</label>
-    <input type="text" name="room_number" value="{{ classroom.room_number }}" required>
+        <!-- ROOM NUMBER -->
+        <div class="form-group">
+            <label>Room Number</label>
+            <input type="text" name="room_number" value="{{ classroom.room_number }}" required>
+        </div>
 
-    <label>Capacity</label>
-    <input type="number" name="capacity" value="{{ classroom.capacity }}" required>
+        <!-- CAPACITY -->
+        <div class="form-group">
+            <label>Capacity</label>
+            <input type="number" name="capacity" value="{{ classroom.capacity }}" required>
+        </div>
 
-    <button class="btn-primary">Save Changes</button>
-</form>
+        <button class="btn-primary">Save Changes</button>
+
+    </form>
+</div>
 
 {% endblock %}

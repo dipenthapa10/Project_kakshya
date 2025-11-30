@@ -12,7 +12,7 @@
         <select name="dept_ID" required>
             {% for d in departments %}
             <option value="{{ d.dept_ID }}" {% if d.dept_ID==course.dept_ID %}selected{% endif %}>
-                {{ d.dept_name }}
+                {{ d.name }}
             </option>
             {% endfor %}
         </select>
@@ -29,7 +29,7 @@
         <label>Credits</label>
         <input type="number" name="credits" value="{{ course.credits }}" required>
 
-        <button type="submit" class="btn-modern">Save Changes</button>
+        <button type="submit" class="btn-submit">Save Changes</button>
     </form>
 </div>
 {% endblock %}
