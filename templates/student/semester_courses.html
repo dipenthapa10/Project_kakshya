@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Courses — {{ semester }}{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Courses for Semester: {{ semester }}</h2>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Title</th>
+            <th>Section</th>
+            <th>Status</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for c in courses %}
+        <tr>
+            <td>{{ c.course_no }}</td>
+            <td>{{ c.title }}</td>
+            <td>{{ c.section_no }}</td>
+            <td>{{ c.status }}</td>
+            <td>{{ c.grade if c.grade else "-" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

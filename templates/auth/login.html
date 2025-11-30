@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-wrapper">
+    <h2>Login</h2>
+
+    {% if error %}
+    <p style="color:red">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label>Username</label>
+        <input type="text" name="username" required>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <button type="submit">Login</button>
+
+        <p style="margin-top:10px;">
+            Don't have an account?
+            <a href="/auth/signup">Create Account</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

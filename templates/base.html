@@ -25,13 +25,21 @@
             <nav class="nav-links">
                 <a href="{{ url_for('index') }}">Home</a>
 
-                {% if session.get('role') %}
-                <a href="{{ url_for('home') }}">Dashboard</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
-                {% else %}
+                {% if session.get('role') == 'student' %}
+                <a href="{{ url_for('student.dashboard') }}">Dashboard</a>
 
+                {% elif session.get('role') == 'instructor' %}
+                <a href="{{ url_for('instructor.instructor_dashboard') }}">Dashboard</a>
+
+                {% elif session.get('role') == 'admin' %}
+                <a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a>
+                {% endif %}
+
+                {% if session.get('role') %}
+                <a href="{{ url_for('auth.logout') }}">Logout</a>
                 {% endif %}
             </nav>
+
         </div>
     </header>
 

@@ -124,7 +124,8 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"] {
     width: 100%;
     padding: 0.7rem 0.8rem;
     border-radius: 10px;
@@ -486,6 +487,12 @@ input:focus {
     display: flex;
     flex-direction: column;
     gap: 14px;
+}
+
+.form-card {
+    margin: 0 auto;
+    /* center card inside wrapper */
+    max-width: 420px;
 }
 
 /* ########################## FOR CARDS DASHBOARD #################### */

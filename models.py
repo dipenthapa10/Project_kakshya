@@ -743,3 +743,278 @@ def get_sections_by_semester(instructor_id, semester):
     rows = cur.fetchall()
     conn.close()
     return rows
+
+
+##################### #########
+####### STUDENT ###############
+##########
+
+def get_student_enrollments(student_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT section_ID
+        FROM Enrollment
+        WHERE student_ID = %s
+    """, (student_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
+def register_student_in_section(student_id, section_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO Enrollment(student_ID, section_ID, enroll_semester, enroll_year)
+        VALUES (%s, %s, 'Fall', 2025)
+    """, (student_id, section_id))
+    conn.commit()
+    conn.close()
+
+def drop_student_from_section(student_id, section_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        DELETE FROM Enrollment
+        WHERE student_ID = %s AND section_ID = %s
+    """, (student_id, section_id))
+    conn.commit()
+    conn.close()
+
+
+
+def get_all_sections():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT S.section_ID, S.section_no, S.semester,
+               C.course_no, C.title,
+               I.first_name, I.last_name
+        FROM Section S
+        JOIN Course C ON S.course_ID = C.course_ID
+        LEFT JOIN Instructor I ON S.instructor_ID = I.instructor_ID
+    """)
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
+#### drop 
+
+def drop_student_class(student_id, section_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        DELETE FROM Enrollment
+        WHERE student_ID = %s AND section_ID = %s
+    """, (student_id, section_id))
+    conn.commit()
+    conn.close()
+
+
+
+
+#### check final grades 
+
+def get_student_grades(student_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 
+            C.course_no,
+            C.title,
+            S.section_no,
+            S.semester,
+            E.grade
+        FROM Enrollment E
+        JOIN Section S ON E.section_ID = S.section_ID
+        JOIN Course C ON S.course_ID = C.course_ID
+        WHERE E.student_ID = %s
+    """, (student_id,))
+    
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+## Get all semesters a student has
+def get_student_semesters(student_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT DISTINCT S.semester
+        FROM Enrollment E
+        JOIN Section S ON E.section_ID = S.section_ID
+        WHERE E.student_ID = %s
+        ORDER BY S.semester
+    """, (student_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return [row['semester'] for row in rows]
+
+## get courses by sememster
+
+def get_courses_by_semester(student_id, semester):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT
+            C.course_no,
+            C.title,
+            S.section_no,
+            S.semester,
+            E.grade,
+            CASE
+                WHEN E.grade IS NULL AND S.semester = %s THEN 'In Progress'
+                WHEN E.grade IS NULL AND S.semester < %s THEN 'Completed (Missing Grade)'
+                WHEN E.grade IS NULL THEN 'Not Started'
+                ELSE 'Completed'
+            END AS status
+        FROM Enrollment E
+        JOIN Section S ON E.section_ID = S.section_ID
+        JOIN Course C ON S.course_ID = C.course_ID
+        WHERE E.student_ID = %s AND S.semester = %s
+        ORDER BY C.course_no
+    """, (semester, semester, student_id, semester))
+
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
+### full section details
+
+def get_section_info(section_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 
+            S.section_ID,
+            S.section_no,
+            S.semester,
+            C.course_ID,
+            C.course_no,
+            C.title,
+            C.credits,
+            I.first_name,
+            I.last_name,
+            CL.building,
+            CL.room_number,
+            T.weekday,
+            T.start_time,
+            T.end_time
+        FROM Section S
+        JOIN Course C ON S.course_ID = C.course_ID
+        LEFT JOIN Instructor I ON S.instructor_ID = I.instructor_ID
+        LEFT JOIN Classroom CL ON S.building = CL.building AND S.room_number = CL.room_number
+        LEFT JOIN Timeslot T ON S.timeslot_ID = T.timeslot_ID
+        WHERE S.section_ID = %s
+    """, (section_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
+## get pre req foor the course 
+
+def get_course_prereqs(course_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT C.course_no, C.title
+        FROM Pre_Requisite P
+        JOIN Course C ON P.prereq_course_ID = C.course_ID
+        WHERE P.course_ID = %s
+    """, (course_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+## check student if enrolled 
+
+def is_student_enrolled(student_id, section_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 1
+        FROM Enrollment
+        WHERE student_ID = %s AND section_ID = %s
+    """, (student_id, section_id))
+    row = cur.fetchone()
+    conn.close()
+    return row is not None
+
+
+
+def get_student_sections(student_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 
+            E.section_ID,
+            S.section_no,
+            S.semester,
+            C.course_no,
+            C.title
+        FROM Enrollment E
+        JOIN Section S ON E.section_ID = S.section_ID
+        JOIN Course C ON S.course_ID = C.course_ID
+        WHERE E.student_ID = %s
+    """, (student_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
+###### advisor part
+
+def get_student_advisor(student_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 
+            I.instructor_ID,
+            I.first_name,
+            I.last_name,
+            I.email,
+            D.name AS dept_name
+        FROM Advisor A
+        JOIN Instructor I ON A.instructor_ID = I.instructor_ID
+        JOIN Department D ON I.dept_ID = D.dept_ID
+        WHERE A.student_ID = %s
+    """, (student_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
+
+#### profile
+
+def get_student(student_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT student_ID, first_name, middle_name, last_name, email
+        FROM Student
+        WHERE student_ID = %s
+    """, (student_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
+def update_student_profile(student_id, first, middle, last, email):
+
+    if middle.strip() == "":
+        middle = None
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Student
+        SET first_name = %s,
+            middle_name = %s,
+            last_name = %s,
+            email = %s
+        WHERE student_ID = %s
+    """, (first, middle, last, email, student_id))
+    conn.commit()
+    conn.close()
+

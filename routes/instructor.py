@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for,session
 from models import *
 
 instructor_bp = Blueprint("instructor", __name__, url_prefix="/instructor")
@@ -17,7 +17,7 @@ def instructor_dashboard():
 ########################################
 @instructor_bp.route("/grades")
 def grade_sections():
-    instructor_id = 1   # TODO: Replace with session["instructor_ID"]
+    instructor_id = session["instructor_id"]
     sections = get_instructor_sections(instructor_id)
 
     return render_template(
@@ -64,7 +64,7 @@ def grade_update():
 
 @instructor_bp.route("/advisor")
 def advisor_students():
-    instructor_id = 1   # TODO replace with session login
+    instructor_id = session["instructor_id"]
     students = get_all_students_with_advisors()
     return render_template(
         "instructor/advisor/list.html",
@@ -75,7 +75,7 @@ def advisor_students():
 
 @instructor_bp.route("/advisor/add/<int:student_id>")
 def advisor_add(student_id):
-    instructor_id = 1  # TODO: replace with session login
+    instructor_id = session["instructor_id"]
     assign_advisor(student_id, instructor_id)
     return redirect("/instructor/advisor")
 
@@ -83,7 +83,7 @@ def advisor_add(student_id):
 
 @instructor_bp.route("/advisor/remove/<int:student_id>")
 def advisor_remove(student_id):
-    instructor_id = 1  # TODO replace with session
+    instructor_id = session["instructor_id"]
     remove_advisor(student_id)
     return redirect("/instructor/advisor")
 
@@ -122,7 +122,7 @@ def advisor_remove(student_id):
 # --------------------------------
 @instructor_bp.route("/prereq")
 def prereq_courses():
-    instructor_id = 1  # TODO: replace with session ID
+    instructor_id = session["instructor_id"]
     courses = get_instructor_courses(instructor_id)
     return render_template("instructor/prereq/courses.html", courses=courses)
 
@@ -190,7 +190,7 @@ def remove_student(enrollment_id):
 
 @instructor_bp.route("/profile", methods=["GET", "POST"])
 def instructor_profile():
-    instructor_id = 1  # temporary mock login
+    instructor_id = session["instructor_id"]
 
     instructor = get_instructor(instructor_id)
 
@@ -218,7 +218,7 @@ def instructor_profile():
 
 @instructor_bp.route("/teaching")
 def instructor_teaching():
-    instructor_id = 1  # replace later with session
+    instructor_id = session["instructor_id"]
     
     # get all semesters the instructor teaches
     semesters = get_instructor_semesters(instructor_id)
@@ -229,7 +229,7 @@ def instructor_teaching():
 
 @instructor_bp.route("/teaching/<semester>")
 def instructor_teaching_semester(semester):
-    instructor_id = 1  # replace later with session
+    instructor_id = session["instructor_id"]
     
     sections = get_sections_by_semester(instructor_id, semester)
 

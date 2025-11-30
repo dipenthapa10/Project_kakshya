@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}My Semesters{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Select Semester</h2>
+
+<div class="grid-3 fade">
+    {% for s in semesters %}
+    <a class="card-link" href="/student/semesters/{{ s }}">
+        <div class="card">
+            <h2>{{ s }}</h2>
+            <p>View courses & status</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+{% endblock %}

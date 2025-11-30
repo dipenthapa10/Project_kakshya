@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Section Information{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Section Details</h2>
+
+<div class="info-card fade">
+
+    <h3>{{ section.course_no }} — {{ section.title }}</h3>
+
+    <p><strong>Credits:</strong> {{ section.credits }}</p>
+
+    <p><strong>Section:</strong> {{ section.section_no }}</p>
+    <p><strong>Semester:</strong> {{ section.semester }}</p>
+
+    <p><strong>Instructor:</strong>
+        {% if section.first_name %}
+        {{ section.first_name }} {{ section.last_name }}
+        {% else %}
+        Not Assigned
+        {% endif %}
+    </p>
+
+    <p><strong>Classroom:</strong> {{ section.building }} {{ section.room_number }}</p>
+
+    <p><strong>Timeslot:</strong>
+        {{ section.weekday }}
+        ({{ section.start_time }} – {{ section.end_time }})
+    </p>
+
+    <h4 style="margin-top:25px;">Prerequisites</h4>
+    {% if prereqs %}
+    <ul>
+        {% for p in prereqs %}
+        <li>{{ p.course_no }} — {{ p.title }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No prerequisites</p>
+    {% endif %}
+
+    <h4 style="margin-top:25px;">Your Status</h4>
+
+    {% if enrolled %}
+    <p style="color:green; font-weight:bold;">Enrolled ✓</p>
+    {% else %}
+    <p style="color:#444;">Not Enrolled</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

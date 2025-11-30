@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}My Advisor{% endblock %}
+
+{% block content %}
+<h2 class="k-title fade">Your Advisor</h2>
+
+<div class="info-card fade">
+
+    {% if advisor %}
+    <p><strong>Name:</strong> {{ advisor.first_name }} {{ advisor.last_name }}</p>
+    <p><strong>Email:</strong> {{ advisor.email }}</p>
+    <p><strong>Department:</strong> {{ advisor.dept_name }}</p>
+    {% else %}
+    <p>No advisor assigned.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}My Grades{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">My Final Grades</h2>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Title</th>
+            <th>Section</th>
+            <th>Semester</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for g in grades %}
+        <tr>
+            <td>{{ g.course_no }}</td>
+            <td>{{ g.title }}</td>
+            <td>{{ g.section_no }}</td>
+            <td>{{ g.semester }}</td>
+            <td style="font-weight: bold;">
+                {% if g.grade %}
+                {{ g.grade }}
+                {% else %}
+                <span style="color:#777;">Not Released</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

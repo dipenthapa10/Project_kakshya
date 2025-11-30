@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Register for Classes{% endblock %}
+
+{% block content %}
+<h2 class="k-title fade">Register for Classes</h2>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Title</th>
+            <th>Section</th>
+            <th>Instructor</th>
+            <th>Semester</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for s in sections %}
+        <tr>
+            <td>{{ s.course_no }}</td>
+            <td>{{ s.title }}</td>
+            <td>{{ s.section_no }}</td>
+            <td>{{ s.first_name }} {{ s.last_name }}</td>
+            <td>{{ s.semester }}</td>
+
+            <td class="col-center">
+
+                {% if s.section_ID in enrolled_ids %}
+                <!-- Student already enrolled: show DROP button -->
+                <a href="/student/drop/{{ s.section_ID }}" class="btn-delete"
+                    onclick="return confirm('Are you sure you want to drop this class?');">
+                    <i class="fa-solid fa-delete-left fa-lg"></i>
+                </a>
+
+                {% else %}
+                <!-- Not enrolled: show REGISTER button -->
+                <a href="/student/register/{{ s.section_ID }}" class="btn-primary"
+                    onclick="return confirm('Register for this class?');">
+                    Register
+                </a>
+                {% endif %}
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
