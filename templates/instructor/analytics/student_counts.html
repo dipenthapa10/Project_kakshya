@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Student Counts by Department{% endblock %}
+
+{% block content %}
+<div class="k-page">
+    <h1 class="k-title fade">Student Counts by Department</h1>
+    <p class="k-subtitle">Total number of students (past & current) in each department.</p>
+
+    <div class="k-card">
+        <table class="k-table">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Total Students</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row.dept_name }} ({{ row.dept_ID }})</td>
+                    <td>{{ row.total_students }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2" style="text-align:center;">No student data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

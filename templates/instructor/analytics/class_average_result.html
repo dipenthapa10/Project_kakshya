@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Class Average GPA{% endblock %}
+
+{% block content %}
+<div class="k-page fade">
+
+    <h1 class="k-title">Class Average GPA</h1>
+
+    <div class="k-card k-info-box">
+
+        {% if avg %}
+        <p><strong>Average GPA:</strong> {{ avg }}</p>
+        <p><strong>Semesters:</strong> {{ sem_start }} → {{ sem_end }}</p>
+        {% else %}
+        <p>No grade data found for this course and semester range.</p>
+        {% endif %}
+
+        <a href="{{ url_for('instructor.class_average') }}" class="k-button">Back</a>
+    </div>
+
+</div>
+{% endblock %}

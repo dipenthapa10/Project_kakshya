@@ -1,39 +1,46 @@
 {% extends "base.html" %}
-{% block title %}Roster{% endblock %}
+{% block title %}Section Roster{% endblock %}
 
 {% block content %}
-
 <h2 class="k-title fade">Section Roster</h2>
 
+<h3>{{ section.course_ID }} — Section {{ section.section_no }} ({{ section.semester }})</h3>
+
 <table class="k-table fade">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Grade</th>
-            <th>Remove</th>
-        </tr>
-    </thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Grade</th>
+        <th>Update</th>
+    </tr>
 
-    <tbody>
-        {% for r in roster %}
-        <tr>
-            <td>{{ r.first_name }} {{ r.last_name }}</td>
-            <td>{{ r.email }}</td>
+    {% for r in roster %}
+    <tr>
+        <td>{{ r.first_name }} {{ r.last_name }}</td>
+        <td>{{ r.email }}</td>
 
-            <td>
-                {{ r.grade if r.grade else "-" }}
-            </td>
+        <td>
+            <form action="/instructor/grades/update" method="POST" style="display:flex; gap:8px;">
+                <input type="hidden" name="enrollment_id" value="{{ r.enrollment_ID }}">
+                <input type="hidden" name="section_id" value="{{ section.section_ID }}">
 
-            <td class="col-center">
-                <a href="/instructor/grades/remove/{{ r.enrollment_ID }}" class="btn-delete"
-                    onclick="return confirm('Remove this student from section?');">
-                    <i class="fa-solid fa-trash fa-bounce"></i>
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+                <select name="grade" class="k-input">
+                    <option value="" {% if not r.grade %}selected{% endif %}>--</option>
+                    <option value="A" {% if r.grade=="A" %}selected{% endif %}>A</option>
+                    <option value="B" {% if r.grade=="B" %}selected{% endif %}>B</option>
+                    <option value="C" {% if r.grade=="C" %}selected{% endif %}>C</option>
+                    <option value="D" {% if r.grade=="D" %}selected{% endif %}>D</option>
+                    <option value="F" {% if r.grade=="F" %}selected{% endif %}>F</option>
+                </select>
+
+        </td>
+
+        <td>
+            <button class="k-button">Save</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
 </table>
 
 {% endblock %}

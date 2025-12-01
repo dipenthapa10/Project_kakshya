@@ -127,5 +127,5 @@ def login():
 @auth_bp.route("/logout")
 def logout():
     session.clear()
-    return redirect("/auth/login")
+    return redirect("/")
 

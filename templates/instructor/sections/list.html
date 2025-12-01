@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Your Sections{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Your Sections</h2>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Title</th>
+            <th>Section</th>
+            <th>Semester</th>
+            <th>Roster</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for s in sections %}
+        <tr>
+            <td>{{ s.course_no }}</td>
+            <td>{{ s.title }}</td>
+            <td>{{ s.section_no }}</td>
+            <td>{{ s.semester }}</td>
+
+            <td>
+                <!-- Go to remove.html -->
+                <a href="/instructor/sections/remove/{{ s.section_ID }}" class="roster-icon" title="View Roster">
+                    👥
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

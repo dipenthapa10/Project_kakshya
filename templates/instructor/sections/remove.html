@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Section Roster{% endblock %}
+
+{% block content %}
+
+<h2 class="k-title fade">Section Roster</h2>
+
+<table class="k-table fade">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Grade</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for r in roster %}
+        <tr>
+            <td>{{ r.first_name }} {{ r.last_name }}</td>
+            <td>{{ r.email }}</td>
+            <td>{{ r.grade if r.grade else "-" }}</td>
+
+            <td class="col-center">
+                <a href="/instructor/sections/remove/student/{{ r.enrollment_ID }}" class="btn-delete"
+                    onclick="return confirm('Remove this student from section?');">
+                    ❌
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="/instructor/sections" class="btn-back">⬅ Back</a>
+
+{% endblock %}

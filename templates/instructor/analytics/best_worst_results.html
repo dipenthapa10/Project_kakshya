@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Class Performance{% endblock %}
+
+{% block content %}
+<div class="k-page">
+    <h1 class="k-title fade">Best & Worst Classes - {{ semester }}</h1>
+
+    {% if not results.best %}
+    <p>No grade data available for this semester.</p>
+    {% else %}
+
+    <div class="k-grid fade">
+
+        <div class="k-card">
+            <h3>Best Performing Class</h3>
+            <p><strong>{{ results.best.course_no }}</strong> – {{ results.best.title }}</p>
+            <p>Average GPA: <strong>{{ results.best.avg_gpa }}</strong></p>
+        </div>
+
+        <div class="k-card">
+            <h3>Worst Performing Class</h3>
+            <p><strong>{{ results.worst.course_no }}</strong> – {{ results.worst.title }}</p>
+            <p>Average GPA: <strong>{{ results.worst.avg_gpa }}</strong></p>
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}

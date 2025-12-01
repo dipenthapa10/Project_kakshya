@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Submit / Change Grades{% endblock %}
+
+{% block content %}
+<h2 class="k-title fade">Submit / Change Grades</h2>
+
+<table class="k-table fade">
+    <tr>
+        <th>Course</th>
+        <th>Title</th>
+        <th>Section</th>
+        <th>Semester</th>
+        <th>Grade</th>
+    </tr>
+
+    {% for sec in sections %}
+    <tr>
+        <td>{{ sec.course_no }}</td>
+        <td>{{ sec.title }}</td>
+        <td>{{ sec.section_no }}</td>
+        <td>{{ sec.semester }}</td>
+        <td>
+            <a href="/instructor/grades/section/{{ sec.section_ID }}" class="k-icon">
+                📝
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

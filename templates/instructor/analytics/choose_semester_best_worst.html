@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Choose Semester{% endblock %}
+
+{% block content %}
+<div class="k-page">
+    <h1 class="k-title fade">Best & Worst Classes</h1>
+    <p>Select a semester to view performance.</p>
+
+    <form method="POST" action="{{ url_for('instructor.best_worst_results') }}">
+        <div class="k-card">
+            <label>Semester</label>
+            <select name="semester" required>
+                <option value="" disabled selected>Select Semester</option>
+                {% for s in semesters %}
+                <option value="{{ s }}">{{ s }}</option>
+                {% endfor %}
+            </select>
+
+            <button class="k-btn" type="submit">View Results</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

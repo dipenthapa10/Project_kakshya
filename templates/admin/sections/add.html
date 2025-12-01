@@ -33,18 +33,14 @@
         {% endfor %}
     </select>
 
-    <!-- Classroom -->
+    <!-- FIXED: Combined Classroom dropdown -->
     <label>Classroom</label>
-    <select name="building" required>
+    <select name="classroom" required>
+        <option value="" disabled selected>Select Classroom</option>
         {% for room in classrooms %}
-        <option value="{{ room.building }}">{{ room.building }}</option>
-        {% endfor %}
-    </select>
-
-    <label>Room Number</label>
-    <select name="room_number" required>
-        {% for room in classrooms %}
-        <option value="{{ room.room_number }}">{{ room.room_number }}</option>
+        <option value="{{ room.building }}|{{ room.room_number }}">
+            {{ room.building }} — Room {{ room.room_number }}
+        </option>
         {% endfor %}
     </select>
 

@@ -570,3 +570,24 @@ input:focus {
     color: #a00;
     border: 1px solid #e0a0a0;
 }
+
+
+.k-form label {
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.k-form input,
+.k-form select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d1d1;
+    background: #fff;
+}
+
+.k-info-box p {
+    margin: 6px 0;
+}

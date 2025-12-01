@@ -16,7 +16,7 @@
         <p>Grade your students.</p>
     </a>
 
-    <a class="k-card" href="/instructor/advising">
+    <a class="k-card" href="/instructor/advisor">
         <h3>Advisor Management</h3>
         <p>Add / remove academic advisees.</p>
     </a>
@@ -31,11 +31,39 @@
         <p>View courses you teach by semester.</p>
     </a>
 
-
     <a class="k-card" href="/instructor/profile">
         <h3>Edit Profile</h3>
         <p>Modify your personal information.</p>
     </a>
+
+    <!-- FINAL HW5 -->
+
+
+    <a class="k-card" href="/instructor/analytics/department_averages">
+        <h3>Department Grade Averages</h3>
+        <p>View average GPA per department.</p>
+    </a>
+
+    <a class="k-card" href="{{ url_for('instructor.class_average') }}">
+        <h3>Class GPA </h3>
+        <p>View the average grade of a class across selected semesters.</p>
+    </a>
+
+    <a class="k-card" href="{{ url_for('instructor.best_worst_class') }}">
+        <h3>Best & Worst Classes</h3>
+        <p>See top and bottom performing classes by semester.</p>
+    </a>
+
+    <a href="/instructor/analytics/student_counts" class="k-card">
+        <h3>Total Students by Department</h3>
+        <p>View total past & current students in each department.</p>
+    </a>
+
+    <a class="k-card" href="/instructor/analytics/current_enrollment">
+        <h3>Current Enrollment by Department</h3>
+        <p>Shows students currently taking classes.</p>
+    </a>
+
 
 </div>
 {% endblock %}

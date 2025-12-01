@@ -83,9 +83,19 @@ def update_course(course_id, dept_ID, course_no, title, credits):
 def delete_course(course_id):
     conn = get_connection()
     cur = conn.cursor()
+
+    # 1. Remove prereqs WHERE this course is the parent course
+    cur.execute("DELETE FROM Pre_Requisite WHERE course_ID = %s", (course_id,))
+
+    # 2. Remove prereqs WHERE this course is a prerequisite for others
+    cur.execute("DELETE FROM Pre_Requisite WHERE prereq_course_ID = %s", (course_id,))
+
+    # 3. Delete actual course
     cur.execute("DELETE FROM Course WHERE course_ID = %s", (course_id,))
+
     conn.commit()
     conn.close()
+
 
 ####################### DEPARTMENT ############################
 
@@ -448,7 +458,7 @@ def get_all_students():
         SELECT s.student_ID, s.first_name, s.middle_name, s.last_name, 
                s.email, d.name AS dept_name
         FROM Student s
-        JOIN Department d ON s.dept_ID = d.dept_ID
+        LEFT JOIN Department d ON s.dept_ID = d.dept_ID
         ORDER BY s.last_name
     """)
     rows = cur.fetchall()
@@ -537,15 +547,36 @@ def get_instructor_sections(instructor_id):
 
 
 ##### Get roster of a section
+# def get_section_roster(section_id):
+#     conn = get_connection()
+#     cur = conn.cursor()
+#     cur.execute("""
+#         SELECT e.enrollment_ID, st.student_ID, st.first_name, st.last_name, e.grade
+#         FROM Enrollment e
+#         JOIN Student st ON e.student_ID = st.student_ID
+#         WHERE e.section_ID = %s
+#     """, (section_id,))
+#     rows = cur.fetchall()
+#     conn.close()
+#     return rows
+
 def get_section_roster(section_id):
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
     cur.execute("""
-        SELECT e.enrollment_ID, st.student_ID, st.first_name, st.last_name, e.grade
+        SELECT 
+            e.enrollment_ID,
+            st.student_ID,
+            st.first_name,
+            st.last_name,
+            st.email,
+            e.grade
         FROM Enrollment e
         JOIN Student st ON e.student_ID = st.student_ID
         WHERE e.section_ID = %s
     """, (section_id,))
+
     rows = cur.fetchall()
     conn.close()
     return rows
@@ -1063,3 +1094,203 @@ def update_student_profile(student_id, first, middle, last, email):
     conn.commit()
     conn.close()
 
+
+
+def get_enrollment_by_id(enrollment_id):
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+    cur.execute("SELECT * FROM Enrollment WHERE enrollment_ID = %s", (enrollment_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
+
+def remove_student(enrollment_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM Enrollment WHERE enrollment_ID = %s", (enrollment_id,))
+    conn.commit()
+    conn.close()
+
+
+###############################################
+#.    FINAL HW 5
+#####
+
+def get_avg_grade_by_department():
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    query = """
+        SELECT 
+            d.dept_ID,
+            d.name AS dept_name,
+            ROUND(AVG(
+                CASE e.grade
+                    WHEN 'A'  THEN 4.0
+                    WHEN 'A-' THEN 3.7
+                    WHEN 'B+' THEN 3.3
+                    WHEN 'B'  THEN 3.0
+                    WHEN 'B-' THEN 2.7
+                    WHEN 'C+' THEN 2.3
+                    WHEN 'C'  THEN 2.0
+                    WHEN 'C-' THEN 1.7
+                    WHEN 'D+' THEN 1.3
+                    WHEN 'D'  THEN 1.0
+                    WHEN 'F'  THEN 0.0
+                    ELSE NULL
+                END
+            ), 2) AS avg_gpa
+        FROM Department d
+        LEFT JOIN Student s ON s.dept_ID = d.dept_ID
+        LEFT JOIN Enrollment e ON e.student_ID = s.student_ID
+        GROUP BY d.dept_ID, d.name
+        ORDER BY d.dept_ID;
+    """
+
+    cur.execute(query)
+    rows = cur.fetchall()
+
+    conn.close()
+    return rows
+
+# 2
+def get_class_average(course_id, sem_start, sem_end):
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    query = """
+        SELECT 
+            ROUND(AVG(
+                CASE e.grade
+                    WHEN 'A'  THEN 4.0
+                    WHEN 'A-' THEN 3.7
+                    WHEN 'B+' THEN 3.3
+                    WHEN 'B'  THEN 3.0
+                    WHEN 'B-' THEN 2.7
+                    WHEN 'C+' THEN 2.3
+                    WHEN 'C'  THEN 2.0
+                    WHEN 'C-' THEN 1.7
+                    WHEN 'D+' THEN 1.3
+                    WHEN 'D'  THEN 1.0
+                    WHEN 'F'  THEN 0.0
+                END
+            ), 2) AS avg_gpa
+        FROM Enrollment e
+        JOIN Section s ON e.section_ID = s.section_ID
+        WHERE s.course_ID = %s
+          AND s.semester BETWEEN %s AND %s
+          AND e.grade IS NOT NULL;
+    """
+
+    cur.execute(query, (course_id, sem_start, sem_end))
+    row = cur.fetchone()
+
+    conn.close()
+    return row["avg_gpa"]
+
+# 3
+
+def get_all_semesters():
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    cur.execute("SELECT DISTINCT semester FROM Section ORDER BY semester;")
+
+    rows = cur.fetchall()
+    conn.close()
+
+    return [row["semester"] for row in rows]
+
+def get_best_and_worst_classes(semester):
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    query = """
+        SELECT 
+            c.course_no,
+            c.title,
+            ROUND(AVG(
+                CASE e.grade
+                    WHEN 'A'  THEN 4.0
+                    WHEN 'A-' THEN 3.7
+                    WHEN 'B+' THEN 3.3
+                    WHEN 'B'  THEN 3.0
+                    WHEN 'B-' THEN 2.7
+                    WHEN 'C+' THEN 2.3
+                    WHEN 'C'  THEN 2.0
+                    WHEN 'C-' THEN 1.7
+                    WHEN 'D+' THEN 1.3
+                    WHEN 'D'  THEN 1.0
+                    WHEN 'F'  THEN 0.0
+                    ELSE NULL
+                END
+            ), 2) AS avg_gpa
+        FROM Section s
+        JOIN Enrollment e ON s.section_ID = e.section_ID
+        JOIN Course c ON s.course_ID = c.course_ID
+        WHERE s.semester = %s
+        GROUP BY c.course_ID
+        HAVING avg_gpa IS NOT NULL
+        ORDER BY avg_gpa DESC;
+    """
+
+    cur.execute(query, (semester,))
+    rows = cur.fetchall()
+    conn.close()
+
+    if not rows:
+        return {"best": None, "worst": None}
+
+    return {
+        "best": rows[0],
+        "worst": rows[-1]
+    }
+
+
+#4
+
+def get_student_count_by_department():
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    query = """
+        SELECT 
+            d.dept_ID,
+            d.name AS dept_name,
+            COUNT(s.student_ID) AS total_students
+        FROM Department d
+        LEFT JOIN Student s ON s.dept_ID = d.dept_ID
+        GROUP BY d.dept_ID, d.name
+        ORDER BY total_students DESC;
+    """
+
+    cur.execute(query)
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
+#5
+
+def get_current_enrollment_by_department():
+    conn = get_connection()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    query = """
+        SELECT 
+            d.name AS dept_name,
+            COUNT(DISTINCT e.student_ID) AS total_current
+        FROM Department d
+        LEFT JOIN Student s ON s.dept_ID = d.dept_ID
+        LEFT JOIN Enrollment e ON e.student_ID = s.student_ID
+            AND e.grade IS NULL   -- only current enrollments
+        GROUP BY d.dept_ID, d.name
+        ORDER BY d.name;
+    """
+
+    cur.execute(query)
+    rows = cur.fetchall()
+
+    conn.close()
+    return rows

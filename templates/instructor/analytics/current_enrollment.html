@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Current Enrollment by Department{% endblock %}
+
+{% block content %}
+<div class="k-page">
+    <h1 class="k-title fade">Current Enrollment by Department</h1>
+    <p class="k-subtitle">Number of students currently taking at least one class.</p>
+
+    <div class="k-card">
+        <table class="k-table">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Currently Enrolled</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row.dept_name }}</td>
+                    <td>{{ row.total_current }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2" style="text-align:center;">No current enrollments.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

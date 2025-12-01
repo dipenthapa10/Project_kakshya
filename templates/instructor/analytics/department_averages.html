@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Department Grade Averages{% endblock %}
+
+{% block content %}
+<div class="k-page">
+    <h1 class="k-title fade">Department Grade Averages</h1>
+    <p class="k-subtitle">Average GPA of all students by department.</p>
+
+    <div class="k-card">
+        <table class="k-table">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Average GPA</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in dept_stats %}
+                <tr>
+                    <td>{{ row.dept_name }} ({{ row.dept_ID }})</td>
+                    <td>{{ row.avg_gpa if row.avg_gpa else "—" }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                        No grade data available.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

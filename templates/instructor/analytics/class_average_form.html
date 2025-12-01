@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Class Average GPA{% endblock %}
+
+{% block content %}
+<div class="k-page fade">
+
+    <h1 class="k-title">Class Average GPA</h1>
+    <p class="k-subtitle">Select a class and a semester range.</p>
+
+    <form method="POST" class="k-card k-form">
+
+        <div class="form-group">
+            <label>Course</label>
+            <select name="course_id" required>
+                {% for c in courses %}
+                <option value="{{ c.course_ID }}">
+                    {{ c.course_no }} — {{ c.title }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Start Semester</label>
+            <input type="text" name="sem_start" placeholder="e.g., Fall" required>
+        </div>
+
+        <div class="form-group">
+            <label>End Semester</label>
+            <input type="text" name="sem_end" placeholder="e.g., Spring" required>
+        </div>
+
+        <button class="k-button" type="submit">Get Average</button>
+    </form>
+</div>
+{% endblock %}

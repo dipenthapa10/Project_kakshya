@@ -114,6 +114,28 @@ def admin_sections():
     return render_template("admin/sections/list.html", sections=sections)
 
 
+# @admin_bp.route("/sections/add", methods=["GET", "POST"])
+# def add_section():
+#     if request.method == "POST":
+#         course_id = request.form["course_ID"]
+#         section_no = request.form["section_no"]
+#         semester = request.form["semester"]
+#         instructor_ID = request.form["instructor_ID"]
+#         building = request.form["building"]
+#         room_number = request.form["room_number"]
+#         timeslot_id = request.form["timeslot_ID"]
+
+#         insert_section(course_id, section_no, semester, instructor_ID, building, room_number, timeslot_id)
+#         return redirect("/admin/sections")
+
+#     return render_template(
+#         "admin/sections/add.html",
+#         courses=get_all_courses(),
+#         instructors=get_all_instructors(),
+#         classrooms=get_all_classrooms(),
+#         timeslots=get_all_timeslots()
+#     )
+
 @admin_bp.route("/sections/add", methods=["GET", "POST"])
 def add_section():
     if request.method == "POST":
@@ -121,8 +143,11 @@ def add_section():
         section_no = request.form["section_no"]
         semester = request.form["semester"]
         instructor_ID = request.form["instructor_ID"]
-        building = request.form["building"]
-        room_number = request.form["room_number"]
+
+        # FIX: Combined classroom value
+        classroom = request.form["classroom"]
+        building, room_number = classroom.split("|")
+
         timeslot_id = request.form["timeslot_ID"]
 
         insert_section(course_id, section_no, semester, instructor_ID, building, room_number, timeslot_id)
@@ -135,7 +160,6 @@ def add_section():
         classrooms=get_all_classrooms(),
         timeslots=get_all_timeslots()
     )
-
 
 @admin_bp.route("/sections/edit/<int:section_id>", methods=["GET", "POST"])
 def edit_section(section_id):
@@ -377,3 +401,4 @@ def assign_instructor(section_id):
 def remove_teacher_route(section_id):
     remove_teacher(section_id)
     return redirect("/admin/sections")
+
