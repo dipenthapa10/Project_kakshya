@@ -25,14 +25,16 @@
             <td class="col-center">
                 <a href="/instructor/sections/remove/student/{{ r.enrollment_ID }}" class="btn-delete"
                     onclick="return confirm('Remove this student from section?');">
-                    ❌
+                    <i class="fa-solid fa-delete-left fa-lg"></i>
                 </a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-<a href="/instructor/sections" class="btn-back">⬅ Back</a>
+<br>
+<br>
+<br>
+<a href="/instructor/sections" class="btn-back"><i class="fa-solid fa-backward fa-lg"></i></a>
 
 {% endblock %}

@@ -1045,7 +1045,8 @@ def get_student_sections(student_id):
 
 def get_student_advisor(student_id):
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
     cur.execute("""
         SELECT 
             I.instructor_ID,
@@ -1053,11 +1054,12 @@ def get_student_advisor(student_id):
             I.last_name,
             I.email,
             D.name AS dept_name
-        FROM Advisor A
-        JOIN Instructor I ON A.instructor_ID = I.instructor_ID
-        JOIN Department D ON I.dept_ID = D.dept_ID
-        WHERE A.student_ID = %s
+        FROM Student S
+        LEFT JOIN Instructor I ON S.advisor_ID = I.instructor_ID
+        LEFT JOIN Department D ON I.dept_ID = D.dept_ID
+        WHERE S.student_ID = %s
     """, (student_id,))
+
     row = cur.fetchone()
     conn.close()
     return row
